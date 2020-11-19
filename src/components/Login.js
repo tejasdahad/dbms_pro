@@ -13,6 +13,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { firestore } from '../firebase/firebase';
+import {connect} from 'react-redux';
+import {login} from '../actions/users';
 
 function Copyright() {
   return (
@@ -58,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = (props) => {
+const Login = ({history,login}) => {
   const classes = useStyles();
   const [userId,setUserId] = useState('');
   const [pass,setPass] = useState('');
@@ -71,7 +73,8 @@ const Login = (props) => {
       setPass('');
       setUserId('');
       console.log(data);
-      props.history.push('/add_domain');
+      login({data});
+      history.push('/add_domain');
     }else{
       console.log('Not found or invalid cred');
     }
@@ -144,4 +147,4 @@ const Login = (props) => {
   );
 }
 
-export default Login;
+export default connect(null,{login})(Login);

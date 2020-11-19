@@ -1,5 +1,5 @@
 
-export const addDomain = ({domain='', subdomain='', email=''} = {}) => ({
+export const addDomain = ({domain='', subdomain='', email=''}) => ({
     type: 'ADD_DOMAIN',
     user:{
         domain,
@@ -7,3 +7,10 @@ export const addDomain = ({domain='', subdomain='', email=''} = {}) => ({
         email
     }
 });
+
+export const login = ({data}) => async dispatch => {
+    dispatch({
+        type:'LOGIN',
+        payload:data
+    })
+};

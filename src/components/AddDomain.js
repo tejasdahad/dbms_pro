@@ -55,7 +55,7 @@ const AddDomain = () => {
                 }} style={{background:domain==='IOT'?'grey':'white',color:domain==='IOT'?'white':'blue'}}>IOT</Button>
                 
             </ButtonGroup>
-            
+            <Button >Submit</Button>
       </div>
 );
 }
