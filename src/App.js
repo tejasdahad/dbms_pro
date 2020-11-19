@@ -7,8 +7,7 @@ import configureStore from './store/configureStore';
 const store = configureStore();
 
 const App = () => {
-  return (
-    
+  return (    
       <div className="App">
         <Provider store={store}>
           <AppRouter />
