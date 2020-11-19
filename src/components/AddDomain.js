@@ -2,6 +2,8 @@ import React,{ useState } from 'react';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { makeStyles } from '@material-ui/core/styles';
+import { addDomain }  from '../actions/users';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -9,55 +11,90 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     '& > *': {
-      margin: theme.spacing(1),
+      margin: theme.spacing(1)
     },
   },
 }));
 
-const AddDomain = () => {
+const AddDomain = (props) => {
     const classes = useStyles();
     const [domain,setDomain] = useState('');
-    const data = {
-        ML: [
-            'Image','NLP'
-        ],
-        DS:[
-
-        ]
-    }
-
+    const [subdomain,setSubdomain] = useState('');
     return (
         <div className={classes.root}>
-        
-            <ButtonGroup size="large" color="primary" aria-label="large outlined primary button group">
+            <h3>Select Domain:</h3>
+            <ButtonGroup size="large" color="primary" aria-label="large outlined primary button group" orientation="vertical">
                 <Button onClick={e => {
                     e.preventDefault();
-                    setDomain('ML');
-                }} style={{background:domain==='ML'?'grey':'white',color:domain==='ML'?'white':'blue'}}>Machine Learning</Button>
+                    setDomain('Machinelearning');
+                }} style={{background:domain==='Machinelearning'?'grey':'white',color:domain==='Machinelearning'?'white':'black'}}>Machine Learning</Button>
                 <Button onClick={e => {
                     e.preventDefault();
-                    setDomain('DS');
-                }} style={{background:domain==='DS'?'grey':'white',color:domain==='DS'?'white':'blue'}}>Data Science</Button>
+                    setDomain('Datascience');
+                }} style={{background:domain==='Datascience'?'grey':'white',color:domain==='Datascience'?'white':'black'}}>Data Science</Button> 
                 <Button onClick={e => {
                     e.preventDefault();
                     setDomain('Blockchain');
-                }} style={{background:domain==='Blockchain'?'grey':'white',color:domain==='Blockchain'?'white':'blue'}}>Blockchain</Button>
-                
-            </ButtonGroup>
-            <ButtonGroup size="large" color="primary" aria-label="large outlined primary button group">
+                }} style={{background:domain==='Blockchain'?'grey':'white',color:domain==='Blockchain'?'white':'black'}}>Blockchain</Button>
                 <Button onClick={e => {
                     e.preventDefault();
-                    setDomain('Cyber');
-                }} style={{background:domain==='Cyber'?'grey':'white',color:domain==='Cyber'?'white':'blue'}}>Cybersecurity</Button>
+                    setDomain('Cybersecurity');
+                }} style={{background:domain==='Cybersecurity'?'grey':'white',color:domain==='Cybersecurity'?'white':'black'}}>Cybersecurity</Button>
                 <Button onClick={e => {
                     e.preventDefault();
                     setDomain('IOT');
-                }} style={{background:domain==='IOT'?'grey':'white',color:domain==='IOT'?'white':'blue'}}>IOT</Button>
-                
+                }} style={{background:domain==='IOT'?'grey':'white',color:domain==='IOT'?'white':'black'}}>Internet of Things</Button>
             </ButtonGroup>
-            <Button >Submit</Button>
-      </div>
-);
+
+            {domain && <ButtonGroup size="large" color="primary" aria-label="large outlined primary button group" orientation="vertical">
+                <h3>Select Subdomain:</h3>
+                { domain === 'Machinelearning' &&
+                    <Button onClick={e => {
+                        e.preventDefault();
+                        setSubdomain("ImageRec")
+                    }}>Image Recognition</Button>
+                }
+                { domain === 'Machinelearning' &&
+                    <Button onClick={e => {
+                        e.preventDefault();
+                        setSubdomain("NLP")
+                    }}>NLP</Button>
+                }
+                {
+                    domain === 'Datascience' &&
+                    <Button onClick={e => {
+                        e.preventDefault();
+                        setSubdomain("DA")
+                    }}>Data Analytics</Button>
+                }
+                {
+                    domain === 'Blockchain' &&
+                    <Button onClick={e => {
+                        e.preventDefault();
+                        setSubdomain("Crypto")
+                    }}>CryptoCurrency</Button>
+                }
+                {
+                    domain === 'Cybersecurity' &&
+                    <Button onClick={e => {
+                        e.preventDefault();
+                        setSubdomain("Pentester")
+                    }}>Penetration Testing</Button>
+                }
+                {
+                    domain === 'IOT' &&
+                    <Button onClick={e => {
+                        e.preventDefault();
+                        setSubdomain("Softwaredev")
+                    }}>Software Enginnering</Button>
+                }
+            </ButtonGroup>
+            }
+            <Button onClick={() => {
+                props.dispatch(addDomain({domain,subdomain}));
+            }}>Submit</Button>
+        </div>
+    );
 }
 
-export default AddDomain;
+export default connect()(AddDomain);
