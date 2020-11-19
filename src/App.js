@@ -1,10 +1,10 @@
 import React from 'react';
-import Login from './components/Login';
+import AppRouter from './router/AppRouter';
 
 const App = () => {
   return (
     <div className="App">
-      <Login />
+      <AppRouter />
     </div>
   );
 }

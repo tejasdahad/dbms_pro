@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = () => {
+const Login = (props) => {
   const classes = useStyles();
   const [userId,setUserId] = useState('');
   const [pass,setPass] = useState('');
@@ -67,10 +67,11 @@ const Login = () => {
     e.preventDefault();
     const de = await firestore.collection('2020-21').doc('STUDENTS').collection('STUDENTS').doc(userId).get();
     const data = de.data();
-    if(data.pass===pass){
+    if(data && data.pass===pass){
       setPass('');
       setUserId('');
       console.log(data);
+      props.history.push('/add_domain');
     }else{
       console.log('Not found or invalid cred');
     }
