@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -41,8 +42,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
   
-const StudentCard = () => {
+const StudentCard = ({ users }) => {
     const classes = useStyles();
+    
     return (
         <Paper className={classes.paper}>
           <Typography component="h1" variant="h4" align="center" style={{marginBottom:10,color:"blue"}}>
@@ -51,35 +53,35 @@ const StudentCard = () => {
         <Grid container>
         <Grid item xs={12} style={{marginBottom:10}}>
           <Typography component="h6" variant="h6" align="center">
-          Registration Id : <span style={{color:"grey"}}>C2K18105939</span>
+          Registration Id : <span style={{color:"grey"}}>{users.userId}</span>
           
         </Typography>
             </Grid>
             <Grid item xs={6}>
           <Typography component="h6" variant="h6" align="left">
-          Name : <span style={{color:"grey"}}>Tejas Dahad</span>
+          Name : <span style={{color:"grey"}}>{users.user.name}</span>
           
         </Typography>
             </Grid>
             <Grid item xs={6} style={{marginBottom:10}}>
             
           <Typography component="h6" variant="h6" align="right">
-          Roll No. : <span style={{color:"grey"}}>31169</span>
+          Roll No. : <span style={{color:"grey"}}>{users.user.roll}</span>
           </Typography>
             </Grid>
             <Grid item xs={12} style={{marginBottom:10}}>
             <Typography component="h6" variant="h6" align="left">
-            Email : <span style={{color:"grey"}}>tejasdahad000@gmail.com</span>
+            Email : <span style={{color:"grey"}}>{users.user.email}</span>
             </Typography>
             </Grid>
             <Grid item xs={6}>
             <Typography component="h6" variant="h6" align="left">
-            Domain : <span style={{color:"grey"}}>Data Science</span>
+            Domain : <span style={{color:"grey"}}>{users.user.domain}</span>
             </Typography>
             </Grid>
             <Grid item xs={6}>
             <Typography component="h6" variant="h6" align="right">
-            Sub Domain : <span style={{color:"grey"}}>Data Analytics</span>
+            Sub Domain : <span style={{color:"grey"}}>{users.user.subDomain}</span>
             </Typography>
             </Grid>
         </Grid>
@@ -87,4 +89,8 @@ const StudentCard = () => {
     )
 }
 
-export default StudentCard;
+const mapStateToProps = state => ({
+    users: state.users
+});
+
+export default connect(mapStateToProps)(StudentCard);
