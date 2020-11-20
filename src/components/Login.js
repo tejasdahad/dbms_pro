@@ -1,4 +1,4 @@
-import React,{ useState } from 'react';
+import React,{ useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -60,22 +60,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = ({history,login}) => {
+const Login = ({history,login, users}) => {
   const classes = useStyles();
   const [userId,setUserId] = useState('');
   const [pass,setPass] = useState('');
 
+  useEffect(() => {
+    if(users.user){
+      if(users.user.name===''){
+        history.push('/add_domain');
+      }else{
+        history.push('/profile')
+      }
+    }
+  },[users.user]);
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    const de = await firestore.collection('2020-21').doc('STUDENTS').collection('STUDENTS').doc(userId).get();
-    const data = de.data();
+    var de,data,flag;
+    de = await firestore.collection('2020-21').doc('STUDENTS').collection('STUDENTS').doc(userId).get();
+    data = de.data();
+    if(data){
+      flag='S';
+    }else{
+      de = await firestore.collection('2020-21').doc('TEACHERS').collection('TEACHERS').doc(userId).get();
+      data = de.data();
+      if(data){
+        flag='T';
+      }
+    }
     if(data && data.pass===pass){
       console.log(data);
-      login({data, userId});
+      login({data, userId, flag});
       setPass('');
       setUserId('');
-      
-      history.push('/add_domain');
     }else{
       console.log('Not found or invalid cred');
     }
@@ -148,4 +166,8 @@ const Login = ({history,login}) => {
   );
 }
 
-export default connect(null,{login})(Login);
+const mapStateToProps = state => ({
+  users: state.users
+});
+
+export default connect(mapStateToProps,{login})(Login);
