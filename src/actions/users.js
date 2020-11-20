@@ -1,10 +1,12 @@
 import { firestore } from '../firebase/firebase';
 
-export const addDomain = ({domain,subDomain,user,userId}) => async dispatch => {
+export const addDomain = ({domain,subDomain,email,name,user,userId}) => async dispatch => {
     user = {
         ...user,
         domain,
-        subDomain
+        subDomain,
+        email,
+        name
     };
     await firestore.collection('2020-21').doc('STUDENTS').collection('STUDENTS').doc(userId).set(user);
     console.log(user);
