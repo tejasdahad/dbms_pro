@@ -6,15 +6,12 @@ import Grid from '@material-ui/core/Grid';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import SendIcon from '@material-ui/icons/Send';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
+import { connect } from 'react-redux';
+import DomainListItem from './DomainListItem';
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -64,21 +61,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
   
-const TeacherCard = () => {
+const TeacherCard = ({ users }) => {
     const classes = useStyles();
-    const [open1, setOpen1] = React.useState(true);
-    const [open2, setOpen2] = React.useState(true);
-    const [open3, setOpen3] = React.useState(true);
-
-    const handleClick3 = () => {
-      setOpen3(!open3);
-    };
-    const handleClick2 = () => {
-        setOpen2(!open2);
-      };
-      const handleClick1 = () => {
-        setOpen1(!open1);
-      };
+    
     return (
         <Paper className={classes.paper}>
           <Typography component="h1" variant="h4" align="center" style={{marginBottom:10,color:"blue"}}>
@@ -87,19 +72,19 @@ const TeacherCard = () => {
         <Grid container>
         <Grid item xs={12} style={{marginBottom:10}}>
         <Typography component="h6" variant="h6" align="center">
-        Registration Id : <span style={{color:"grey"}}>T2K1009019</span>
+        Registration Id : <span style={{color:"grey"}}>{users.userId}</span>
         
       </Typography>
           </Grid>
             <Grid item xs={12}>
           <Typography component="h6" variant="h6" align="center">
-          Name : <span style={{color:"grey"}}>Pranjali Joshi</span>
+          Name : <span style={{color:"grey"}}>{users.user.name}</span>
           
         </Typography>
             </Grid>
             <Grid item xs={12} style={{marginBottom:10}}>
             <Typography component="h6" variant="h6" align="center">
-            Email : <span style={{color:"grey"}}>ppj@gmail.com</span>
+            Email : <span style={{color:"grey"}}>{users.user.email}</span>
             </Typography>
             </Grid>
             <Grid item xs={2}></Grid>
@@ -115,50 +100,16 @@ const TeacherCard = () => {
             }
             className={classes.root}
             >
-            <ListItem button onClick={handleClick1}>
-                <ListItemText primary="Data Science" />
-                {open1 ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={open1} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                <ListItem button className={classes.nested}>
-                    
-                    <ListItemText primary="Data Analytics" />
-                </ListItem>
-                </List>
-            </Collapse>
-            <ListItem button onClick={handleClick2}>
-                <ListItemText primary="Machine Learning" />
-                {open2 ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={open2} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                <ListItem button className={classes.nested}>
-                    
-                    <ListItemText primary="Image Recognition" />
-                </ListItem>
-                </List>
-            </Collapse>
-            <ListItem button onClick={handleClick3}>
-                
-                <ListItemText primary="Cyber" />
-                {open3 ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            
-            
-            <Collapse in={open3} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                <ListItem button className={classes.nested}>
-                    
-                    <ListItemText primary="hacking" />
-                </ListItem>
-                </List>
-            </Collapse>
+            { users.user.domain.map(d => 
+                <DomainListItem key={d} item={d} />
+            )}    
             </List>
             </Grid>
         </Grid>
         </Paper>
     )
 }
-
-export default TeacherCard;
+const mapStateToProps = state => ({
+    users: state.users
+})
+export default connect(mapStateToProps)(TeacherCard);
