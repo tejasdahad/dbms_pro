@@ -1,8 +1,6 @@
 const initialState = {
     user:null,
-    domain:null,
-    subdomain:null,
-    email:null
+    userId: null,
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -10,14 +8,13 @@ const usersReducer = (state = initialState, action) => {
         case 'ADD_DOMAIN':
             return {
                 ...state,
-                domain:action.user.domain,
-                subdomain:action.user.subdomain,
-                email:action.user.email
+                user: action.payload
             }
         case 'LOGIN':
             return {
                 ...state,
-                user:action.payload
+                user:action.payload.data,
+                userId: action.payload.userId
             }
         default:
             return state;
