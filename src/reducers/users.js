@@ -1,6 +1,7 @@
 const initialState = {
     user:null,
     userId: null,
+    userType:null
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -14,7 +15,8 @@ const usersReducer = (state = initialState, action) => {
             return {
                 ...state,
                 user:action.payload.data,
-                userId: action.payload.userId
+                userId: action.payload.userId,
+                userType:action.payload.flag
             }
         default:
             return state;

@@ -16,9 +16,9 @@ export const addDomain = ({domain,subDomain,email,name,user,userId}) => async di
     });
 } 
 
-export const login = ({data, userId}) => async dispatch => {
+export const login = ({data, userId, flag}) => async dispatch => {
     const ndata = {
-        data,userId
+        data,userId,flag
     }
     dispatch({
         type:'LOGIN',
