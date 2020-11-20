@@ -1,111 +1,132 @@
 import React,{ useState } from 'react';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles,withStyles } from '@material-ui/core/styles';
 import { addDomain }  from '../actions/users';
 import { connect } from 'react-redux';
+import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import InputBase from '@material-ui/core/InputBase';
+import Button from '@material-ui/core/Button';
+
+function Copyright() {
+    return (
+      <Typography variant="body2" color="textSecondary" align="center">
+        {'Copyright © '}
+        <Link color="inherit" href="https://pict.edu">
+          Pune Institue of Computer Technology
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
+    );
+  }
+
+const BootstrapInput = withStyles((theme) => ({
+    root: {
+        'label + &':{
+            marginTop: theme.spacing(3),
+        },
+    },
+    input:{
+        borderRadius:4,
+        position:'relative',
+        backgroundColor: theme.palette.background.paper,
+        border: '1px  solid #ced4da',
+        fontSize: 16,
+        padding: '10px 26px 10px 12px',
+        transition: theme.transitions.create(['border-color','box-shadow']),
+        fontFamily: [
+            '-apple-system',
+            'BlinkMacSystemFont',
+            '"Segoe UI"',
+            'Roboto',
+            '"Helvetica Neue"',
+            'Arial',
+            'sans-serif',
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
+        ].join(','),
+        '&:focus':{
+            borderRadius: 4,
+            borderColor: '#80bdff',
+            boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+        },
+     },
+}))(InputBase);
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    '& > *': {
-      margin: theme.spacing(1)
+    margin:{
+        margin: theme.spacing(1),
     },
-  },
 }));
 
-const AddDomain = ({addDomain,users }) => {
+const AddDomain = ({addDomain,users,history }) => {
     const classes = useStyles();
     const [domain,setDomain] = useState('');
     const [subDomain,setSubdomain] = useState('');
     const [email,setEmail] = useState('');
     const [name,setName] = useState('');
     return (
-        <div className={classes.root}>
-            <form>
-                <input type='text' placeholder="Name" autoFocus required defaultvalue="" onChange={e => {
+        <div>
+            <FormControl className={classes.margin}>
+                <InputLabel htmlFor='name' autoFocus required defaultValue='' onChange={e => {
                     e.preventDefault();
                     setName(e.target.value);
-                }}/>
-                <input type='text' placeholder="Email" autoFocus required defaultValue="" onChange={e => {
+                }}>
+                Name</InputLabel>
+                <BootstrapInput id='name'/>
+            </FormControl>
+            <FormControl className={classes.margin}>
+                <InputLabel htmlFor='email' required defaultValue='' onChange={e => {
                     e.preventDefault();
                     setEmail(e.target.value);
-                }}/>
-                <h3>Select Domain:</h3>
-                <ButtonGroup size="large" color="primary" aria-label="large outlined primary button group" orientation="vertical">
-                    <Button onClick={e => {
-                        e.preventDefault();
-                        setDomain('Machinelearning');
-                    }} style={{background:domain==='Machinelearning'?'grey':'white',color:domain==='Machinelearning'?'white':'black'}}>Machine Learning</Button>
-                    <Button onClick={e => {
-                        e.preventDefault();
-                        setDomain('Datascience');
-                    }} style={{background:domain==='Datascience'?'grey':'white',color:domain==='Datascience'?'white':'black'}}>Data Science</Button> 
-                    <Button onClick={e => {
-                        e.preventDefault();
-                        setDomain('Blockchain');
-                    }} style={{background:domain==='Blockchain'?'grey':'white',color:domain==='Blockchain'?'white':'black'}}>Blockchain</Button>
-                    <Button onClick={e => {
-                        e.preventDefault();
-                        setDomain('Cybersecurity');
-                    }} style={{background:domain==='Cybersecurity'?'grey':'white',color:domain==='Cybersecurity'?'white':'black'}}>Cybersecurity</Button>
-                    <Button onClick={e => {
-                        e.preventDefault();
-                        setDomain('IOT');
-                    }} style={{background:domain==='IOT'?'grey':'white',color:domain==='IOT'?'white':'black'}}>Internet of Things</Button>
-                </ButtonGroup>
-
-                {domain && <ButtonGroup size="large" color="primary" aria-label="large outlined primary button group" orientation="vertical">
-                    <h3>Select Subdomain:</h3>
-                    { domain === 'Machinelearning' &&
-                        <Button onClick={e => {
-                            e.preventDefault();
-                            setSubdomain("ImageRec")
-                        }} style={{background:subDomain==='ImageRec'?'grey':'white',color:subDomain==='ImageRec'?'white':'black'}}>Image Recognition</Button>
-                    }
-                    { domain === 'Machinelearning' &&
-                        <Button onClick={e => {
-                            e.preventDefault();
-                            setSubdomain("NLP")
-                        }} style={{background:subDomain==='NLP'?'grey':'white',color:subDomain==='NLP'?'white':'black'}}>NLP</Button>
-                    }
-                    {
-                        domain === 'Datascience' &&
-                        <Button onClick={e => {
-                            e.preventDefault();
-                            setSubdomain("DA")
-                        }} style={{background:subDomain==='DA'?'grey':'white',color:subDomain==='DA'?'white':'black'}}>Data Analytics</Button>
-                    }
-                    {
-                        domain === 'Blockchain' &&
-                        <Button onClick={e => {
-                            e.preventDefault();
-                            setSubdomain("Crypto")
-                        }} style={{background:subDomain==='Crypto'?'grey':'white',color:subDomain==='Crypto'?'white':'black'}}>CryptoCurrency</Button>
-                    }
-                    {
-                        domain === 'Cybersecurity' &&
-                        <Button onClick={e => {
-                            e.preventDefault();
-                            setSubdomain("Pentester")
-                        }} style={{background:subDomain==='Pentester'?'grey':'white',color:subDomain==='Pentester'?'white':'black'}}>Penetration Testing</Button>
-                    }
-                    {
-                        domain === 'IOT' &&
-                        <Button onClick={e => {
-                            e.preventDefault();
-                            setSubdomain("Softwaredev")
-                        }} style={{background:subDomain==='Softwaredev'?'grey':'white',color:subDomain==='Softwaredev'?'white':'black'}}>Software Enginnering</Button>
-                    }
-                </ButtonGroup>
-                }
-                <Button onClick={(e) => {
+                }}>Email</InputLabel>
+                <BootstrapInput id='email'/>
+            </FormControl>
+            <h3>Domain:</h3>
+            <FormControl required className={classes.formControl}>
+                <InputLabel id='domain' />
+                <NativeSelect labelId='domain' id='selectdomain' value={domain} onChange={e => {
                     e.preventDefault();
-                    addDomain({domain,subDomain,email,name, user:users.user,userId: users.userId});
-                }}>Submit</Button>
-            </form>
+                    setDomain(e.target.value);
+                }} input={<BootstrapInput/>}>
+                    <option value={"Machinelearning"}>Machine Learning</option>
+                    <option value={"Datascience"}>Data Science</option>
+                    <option value={"Cybersecurity"}>Cybersecurity</option>
+                    <option value={"Blockchain"}>Blockchain</option>
+                    <option value={"IOT"}>Internet of Things</option>
+                </NativeSelect>
+            </FormControl>
+            <h3>Subdomain:</h3>
+            <FormControl required className={classes.formControl}>
+                <InputLabel id='subDomain' />
+                <NativeSelect labelId='subDomain' id='selectsubdomain' value={subDomain} onChange={e => {
+                    e.preventDefault();
+                    setSubdomain(e.target.value);
+                }} input={<BootstrapInput/>}>
+                    { domain === 'Machinelearning' && <option value={"Image rec"}>Image Recognition</option>}
+                    { domain === 'Machinelearning' && <option value={"NLP"}>NLP</option>}
+                    { domain === 'Datascience' && <option value={"Analysis"}>Data Analysis</option>}
+                    { domain === 'Cybersecurity' && <option value={"Pentester"}>Penetration testing</option>}
+                    { domain === 'Blockchain' && <option value={"Cryptocurrency"}>CryptoCurrency</option>}
+                    { domain === 'IOT' && <option value={'Softdev'}>Software Devloper</option>}
+                </NativeSelect>
+            </FormControl>  
+            <Button onClick={(e) => {
+                e.preventDefault();
+                console.log(domain);
+                console.log(subDomain);
+                console.log(name);
+                console.log(email);
+                //addDomain({domain,subDomain,email,name, user:users.user,userId: users.userId});
+                //history.push("/profile");
+            }}>Submit</Button>
+            <Copyright />
         </div>
     );
 }
