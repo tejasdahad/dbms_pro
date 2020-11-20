@@ -16,10 +16,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddDomain = (props) => {
+const AddDomain = ({addDomain,users }) => {
     const classes = useStyles();
     const [domain,setDomain] = useState('');
-    const [subdomain,setSubdomain] = useState('');
+    const [subDomain,setSubdomain] = useState('');
     return (
         <div className={classes.root}>
             <h3>Select Domain:</h3>
@@ -52,49 +52,54 @@ const AddDomain = (props) => {
                     <Button onClick={e => {
                         e.preventDefault();
                         setSubdomain("ImageRec")
-                    }}>Image Recognition</Button>
+                    }} style={{background:subDomain==='ImageRec'?'grey':'white',color:subDomain==='ImageRec'?'white':'black'}}>Image Recognition</Button>
                 }
                 { domain === 'Machinelearning' &&
                     <Button onClick={e => {
                         e.preventDefault();
                         setSubdomain("NLP")
-                    }}>NLP</Button>
+                    }} style={{background:subDomain==='NLP'?'grey':'white',color:subDomain==='NLP'?'white':'black'}}>NLP</Button>
                 }
                 {
                     domain === 'Datascience' &&
                     <Button onClick={e => {
                         e.preventDefault();
                         setSubdomain("DA")
-                    }}>Data Analytics</Button>
+                    }} style={{background:subDomain==='DA'?'grey':'white',color:subDomain==='DA'?'white':'black'}}>Data Analytics</Button>
                 }
                 {
                     domain === 'Blockchain' &&
                     <Button onClick={e => {
                         e.preventDefault();
                         setSubdomain("Crypto")
-                    }}>CryptoCurrency</Button>
+                    }} style={{background:subDomain==='Crypto'?'grey':'white',color:subDomain==='Crypto'?'white':'black'}}>CryptoCurrency</Button>
                 }
                 {
                     domain === 'Cybersecurity' &&
                     <Button onClick={e => {
                         e.preventDefault();
                         setSubdomain("Pentester")
-                    }}>Penetration Testing</Button>
+                    }} style={{background:subDomain==='Pentester'?'grey':'white',color:subDomain==='Pentester'?'white':'black'}}>Penetration Testing</Button>
                 }
                 {
                     domain === 'IOT' &&
                     <Button onClick={e => {
                         e.preventDefault();
                         setSubdomain("Softwaredev")
-                    }}>Software Enginnering</Button>
+                    }} style={{background:subDomain==='Softwaredev'?'grey':'white',color:subDomain==='Softwaredev'?'white':'black'}}>Software Enginnering</Button>
                 }
             </ButtonGroup>
             }
-            <Button onClick={() => {
-                props.dispatch(addDomain({domain,subdomain}));
+            <Button onClick={(e) => {
+                e.preventDefault();
+                addDomain({domain,subDomain, user:users.user,userId: users.userId});
             }}>Submit</Button>
         </div>
     );
 }
 
-export default connect()(AddDomain);
+const mapStateToProps = state => ({
+    users: state.users
+})
+
+export default connect(mapStateToProps,{ addDomain })(AddDomain);

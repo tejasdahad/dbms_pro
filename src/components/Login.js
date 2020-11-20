@@ -70,10 +70,11 @@ const Login = ({history,login}) => {
     const de = await firestore.collection('2020-21').doc('STUDENTS').collection('STUDENTS').doc(userId).get();
     const data = de.data();
     if(data && data.pass===pass){
+      console.log(data);
+      login({data, userId});
       setPass('');
       setUserId('');
-      console.log(data);
-      login({data});
+      
       history.push('/add_domain');
     }else{
       console.log('Not found or invalid cred');
