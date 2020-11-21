@@ -7,6 +7,7 @@ import StudentCard from './StudentCard';
 import TeacherCard from './TeacherCard';
 import { connect } from 'react-redux';
 import AppBar from './Navbar';
+import { login } from '../actions/users';
 
 function Copyright() {
   return (
@@ -59,9 +60,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Profile = ({ users, history }) => {
+const Profile = ({ users, history, login }) => {
   const classes = useStyles();
-  
+  useEffect(() => {
+    if(localStorage.getItem('userid')){
+      login({pass: localStorage.getItem('pass'),userId: localStorage.getItem('userid')});
+    }
+  },[]);
   useEffect(() => {
     console.log('In user effect');
     console.log(users);
@@ -95,4 +100,4 @@ const mapStateToProps = state => ({
     users: state.users
 });
 
-export default connect(mapStateToProps)(Profile);
+export default connect(mapStateToProps,{ login })(Profile);
