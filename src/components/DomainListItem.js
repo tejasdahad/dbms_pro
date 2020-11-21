@@ -37,10 +37,9 @@ const DomainListItem = ({item}) => {
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                {item.sub.map(d => <ListItem key={d} button className={classes.nested}>
-                    
-                    <ListItemText primary={d} />
-                </ListItem>)}
+                <ListItem key={item.sub} button className={classes.nested}>
+                    <ListItemText primary={item.sub} />
+                </ListItem>
                 </List>
             </Collapse>   
         </Fragment>

@@ -1,6 +1,6 @@
-import React,{ Fragment, useState } from 'react';
+import React,{ Fragment, useState, useEffect } from 'react';
 import { makeStyles,withStyles } from '@material-ui/core/styles';
-import { addDomain }  from '../actions/users';
+import { addTeacherDomain }  from '../actions/users';
 import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -17,7 +17,8 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
-
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 const BootstrapInput = withStyles((theme) => ({
     root: {
         'label + &':{
@@ -93,29 +94,41 @@ const useStyles = makeStyles((theme) => ({
       }
 }));
 
-const TeacherDomain = ({addDomain,users,history }) => {
+const TeacherDomain = ({addTeacherDomain,users,history }) => {
     const classes = useStyles();
-    const [domain,setDomain] = useState({
-        ML:false,
-        DS: false,
-        Cyber: false,
-        BlockC: false,
-        IOT: false, 
-    });
+    const [domain,setDomain] = useState('');
     const [domainArray,setDomainArray] = useState([]);
+    const [finalArray,setFinalArray] = useState([]);
     const [subDomainArray,setSubdomainArray] = useState([]); 
-    const [subDomain,setSubdomain] = useState({
-        ImageRec:false,
-        NLP:false,
-        DA:false,
-        Pentester:false,
-        Crypto:false,
-        Softdev: false
-    });
+    const [subDomain,setSubdomain] = useState('');
     const [email,setEmail] = useState('');
     const [name,setName] = useState('');
-    const {ML,DS,Cyber,BlockC,IOT} = domain;
-    const {ImageRec,NLP,DA,Pentester,Crypto,Softdev} = subDomain;
+    
+
+    useEffect(() => {
+        console.log(finalArray);
+    },[finalArray]);
+    const handleAdd = (e) => {
+        e.preventDefault();
+        setDomainArray([
+            ...domainArray,
+            domain
+        ]);
+        setSubdomainArray([
+            ...subDomainArray,
+            subDomain
+        ]);
+        setFinalArray([
+            ...finalArray,
+            {
+                name: domain,
+                sub: subDomain
+            }
+        ]);
+        setDomain('');
+        setSubdomain('');
+    }
+
     const handleDomain = (e) => {
         setDomain({...domain, [e.target.name]: e.target.checked });
         let elem=[];
@@ -165,63 +178,116 @@ const TeacherDomain = ({addDomain,users,history }) => {
                         setEmail(e.target.value);
                     }} />
                 </Grid>
+                <Grid item xs={6}>
+                    <FormControl variant="outlined" className={classes.formControl}>
+                    <InputLabel htmlFor="outlined-age-native-simple">Domain</InputLabel>
+                    <Select
+                        native
+                        value={domain}
+                        onChange={e => {
+                            e.preventDefault();
+                            setDomain(e.target.value);
+                        }}
+                        label="Domain"
+                    >
+                        <option aria-label="None" value="" />
+                        {!domainArray.includes("Machinelearning")&&<option value={"Machinelearning"}>Machine Learning</option>}
+                        {!domainArray.includes("Datascience")&&<option value={"Datascience"}>Data Science</option>}
+                        {!domainArray.includes("Cybersecurity")&&<option value={"Cybersecurity"}>Cybersecurity</option>}
+                        {!domainArray.includes("Blockchain")&&<option value={"Blockchain"}>Blockchain</option>}
+                        {!domainArray.includes("IOT")&&<option value={"IOT"}>Internet of Things</option>}
+                    </Select>
+                    </FormControl>
+                   
+                </Grid>
+                <Grid item xs={6}>
+                    {domain!=='' && <FormControl variant="outlined" className={classes.formControl}>
+                    <InputLabel htmlFor="outlined-age-native-simple">Sub Domain</InputLabel>
+                    <Select
+                        native
+                        value={subDomain}
+                        onChange={e => {
+                            e.preventDefault();
+                            setSubdomain(e.target.value);
+                        }}
+                        label="Sub Domain"
+                    >
+                        <option aria-label="None" value="" />
+                        { domain === 'Machinelearning' && <option value={"Image rec"}>Image Recognition</option>}
+                        { domain === 'Machinelearning' && <option value={"NLP"}>NLP</option>}
+                        { domain === 'Datascience' && <option value={"Analysis"}>Data Analysis</option>}
+                        { domain === 'Cybersecurity' && <option value={"Pentester"}>Penetration testing</option>}
+                        { domain === 'Blockchain' && <option value={"Cryptocurrency"}>CryptoCurrency</option>}
+                        { domain === 'IOT' && <option value={'Softdev'}>Software Devloper</option>}
+                    </Select>
+                    </FormControl>}
+                   
+                </Grid>
+                <Grid item xs={5}></Grid>
+                <Grid item xs={4} alignItems="center">
+                    <Fab color="primary" aria-label="add" disabled={(domain&&subDomain)?false: true} onClick={handleAdd}>
+                        <AddIcon />
+                    </Fab>
+                </Grid>
+                <Grid item xs={3}></Grid>
                 
-                <Grid item xs={6}>
-                    <FormControl required component='fieldset' className={classes.formControl}>
-                        <FormLabel component='legend'>Domain</FormLabel>
-                        <FormGroup>
-                            <FormControlLabel
-                                control={<Checkbox checked={ML} onChange={handleDomain} name="ML"/>}
-                                label='Machine Learning'/>
-                            <FormControlLabel
-                                control={<Checkbox checked={DS} onChange={handleDomain} name="DS"/>}
-                                label='Data Science'/>
-                            <FormControlLabel
-                                control={<Checkbox checked={Cyber} onChange={handleDomain} name="Cyber"/>}
-                                label='Cybersecurity'/>
-                            <FormControlLabel
-                                control={<Checkbox checked={BlockC} onChange={handleDomain} name="BlockC"/>}
-                                label='Blockchain'/>
-                            <FormControlLabel
-                                control={<Checkbox checked={IOT} onChange={handleDomain} name="IOT"/>}
-                                label='Internet Of Things'/>
-                        </FormGroup>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={6}>
-                    <FormControl required component='fieldset' className={classes.formControl}>
-                        <FormLabel component='legend'>Subomain</FormLabel>
-                        <FormGroup>
-                            { domain.ML && <FormControlLabel
-                                control={<Checkbox checked={ImageRec} onChange={handleSubdomain} name="ImageRec"/>}
-                                label='Image Recognition'/>}
-                            { domain.ML && <FormControlLabel
-                                control={<Checkbox checked={NLP} onChange={handleSubdomain} name="NLP"/>}
-                                label='NLP'/>}
-                            { domain.DS && <FormControlLabel
-                                control={<Checkbox checked={DA} onChange={handleSubdomain} name="DA"/>}
-                                label='Data Analysis'/>}
-                            { domain.Cyber && <FormControlLabel
-                                control={<Checkbox checked={Pentester} onChange={handleSubdomain} name="Pentester"/>}
-                                label='Penetration Testing'/>}
-                            { domain.BlockC && <FormControlLabel
-                                control={<Checkbox checked={Crypto} onChange={handleSubdomain} name="Crypto"/>}
-                                label='Cryptocurrency'/>}
-                            { domain.IOT && <FormControlLabel
-                                control={<Checkbox checked={Softdev} onChange={handleSubdomain} name="Softdev"/>}
-                                label='Software Developer'/>}
-                        </FormGroup>
-                    </FormControl>
-                </Grid>
+                {// <Grid item xs={6}>
+                //     <FormControl required component='fieldset' className={classes.formControl}>
+                //         <FormLabel component='legend'>Domain</FormLabel>
+                //         <FormGroup>
+                //             <FormControlLabel
+                //                 control={<Checkbox checked={ML} onChange={handleDomain} name="ML"/>}
+                //                 label='Machine Learning'/>
+                //             <FormControlLabel
+                //                 control={<Checkbox checked={DS} onChange={handleDomain} name="DS"/>}
+                //                 label='Data Science'/>
+                //             <FormControlLabel
+                //                 control={<Checkbox checked={Cyber} onChange={handleDomain} name="Cyber"/>}
+                //                 label='Cybersecurity'/>
+                //             <FormControlLabel
+                //                 control={<Checkbox checked={BlockC} onChange={handleDomain} name="BlockC"/>}
+                //                 label='Blockchain'/>
+                //             <FormControlLabel
+                //                 control={<Checkbox checked={IOT} onChange={handleDomain} name="IOT"/>}
+                //                 label='Internet Of Things'/>
+                //         </FormGroup>
+                //     </FormControl>
+                // </Grid>
+                // <Grid item xs={6}>
+                //     <FormControl required component='fieldset' className={classes.formControl}>
+                //         <FormLabel component='legend'>Subomain</FormLabel>
+                //         <FormGroup>
+                //             { domain.ML && <FormControlLabel
+                //                 control={<Checkbox checked={ImageRec} onChange={handleSubdomain} name="ImageRec"/>}
+                //                 label='Image Recognition'/>}
+                //             { domain.ML && <FormControlLabel
+                //                 control={<Checkbox checked={NLP} onChange={handleSubdomain} name="NLP"/>}
+                //                 label='NLP'/>}
+                //             { domain.DS && <FormControlLabel
+                //                 control={<Checkbox checked={DA} onChange={handleSubdomain} name="DA"/>}
+                //                 label='Data Analysis'/>}
+                //             { domain.Cyber && <FormControlLabel
+                //                 control={<Checkbox checked={Pentester} onChange={handleSubdomain} name="Pentester"/>}
+                //                 label='Penetration Testing'/>}
+                //             { domain.BlockC && <FormControlLabel
+                //                 control={<Checkbox checked={Crypto} onChange={handleSubdomain} name="Crypto"/>}
+                //                 label='Cryptocurrency'/>}
+                //             { domain.IOT && <FormControlLabel
+                //                 control={<Checkbox checked={Softdev} onChange={handleSubdomain} name="Softdev"/>}
+                //                 label='Software Developer'/>}
+                //         </FormGroup>
+                //     </FormControl>
+                // </Grid>
+            }
                
                 <Grid item xs={4}></Grid>
                 <Grid item xs={4}>
                     <Button disabled={
-                        (domain!==''&&subDomain!==''&&email!==''&&name!=='')?false:true
+                        (finalArray.length>0&&email!==''&&name!=='')?false:true
                     } className={classes.button} variant="contained" color="primary" onClick={(e) => {
                         e.preventDefault();
-                        addDomain({domain,subDomain,email,name, user:users.user,userId: users.userId});
-                        history.push("/profile");
+                        addTeacherDomain({finalArray,email,name,user: users.user,userId: users.userId});
+                        history.push('/profile');
                     }}>Submit</Button>
                 </Grid>
             </Grid>
@@ -240,4 +306,4 @@ const mapStateToProps = state => ({
     users: state.users
 })
 
-export default connect(mapStateToProps,{ addDomain })(TeacherDomain);
+export default connect(mapStateToProps,{ addTeacherDomain })(TeacherDomain);

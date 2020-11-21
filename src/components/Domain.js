@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import StudentDomain from './StudentDomain';
 import TeacherDomain from './TeacherDomain';
 import { connect } from 'react-redux';
+import { login } from '../actions/users';
 
 function Copyright() {
     return (
@@ -58,8 +59,14 @@ function Copyright() {
   }));
   
   
-  const Domain = ({ users }) => {
+  const Domain = ({ users, login }) => {
     const classes = useStyles();
+
+    useEffect(() => {
+      if(localStorage.getItem('userid')){
+        login({pass: localStorage.getItem('pass'),userId: localStorage.getItem('userid')});
+      }
+    },[]);
   
     return (
       <React.Fragment>
@@ -77,4 +84,4 @@ function Copyright() {
       users: state.users
   });
   
-  export default connect(mapStateToProps)(Domain);  
+  export default connect(mapStateToProps,{ login })(Domain);  
