@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{ useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -61,9 +61,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
   
-const TeacherCard = ({ users }) => {
+const TeacherCard = ({ users, history }) => {
     const classes = useStyles();
-    
+    useEffect(() => {
+      console.log('In user effect');
+      if(!users.user){
+        console.log('in case');
+        history.push('/');
+      }
+    },[users]);
+  
+  
+    useEffect(() => {
+      if(!users.user){
+        history.push('/');
+      }
+    },[]);
     return (
         <Paper className={classes.paper}>
           <Typography component="h1" variant="h4" align="center" style={{marginBottom:10,color:"blue"}}>

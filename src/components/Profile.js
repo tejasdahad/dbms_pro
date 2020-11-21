@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
@@ -6,6 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import StudentCard from './StudentCard';
 import TeacherCard from './TeacherCard';
 import { connect } from 'react-redux';
+import AppBar from './Navbar';
+import { login } from '../actions/users';
 
 function Copyright() {
   return (
@@ -58,14 +60,35 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Profile = ({ users }) => {
+const Profile = ({ users, history, login }) => {
   const classes = useStyles();
+  useEffect(() => {
+    if(localStorage.getItem('userid')){
+      login({pass: localStorage.getItem('pass'),userId: localStorage.getItem('userid')});
+    }
+  },[]);
+  useEffect(() => {
+    console.log('In user effect');
+    console.log(users);
+    if(users.userType===null){
+      console.log('in case');
+      history.push('/');
+    }
+  },[users]);
+
+
+  useEffect(() => {
+    if(!users.user){
+      history.push('/');
+    }
+  },[]);
 
   return (
     <React.Fragment>
+      <AppBar />
       <CssBaseline />
       <main className={classes.layout}>
-      {users.userType==='S'?<StudentCard/>:<TeacherCard />}
+      {users.user && (users.userType==='S'?<StudentCard/>:<TeacherCard />)}
         
         <Copyright />
       </main>
@@ -77,4 +100,4 @@ const mapStateToProps = state => ({
     users: state.users
 });
 
-export default connect(mapStateToProps)(Profile);
+export default connect(mapStateToProps,{ login })(Profile);
