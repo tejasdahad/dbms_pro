@@ -14,6 +14,7 @@ const usersReducer = (state = initialState, action) => {
             }
         case 'LOGIN':
             localStorage.setItem('userid',action.payload.userId);
+            localStorage.setItem('pass',action.payload.data.pass);
             return {
                 ...state,
                 user:action.payload.data,
@@ -22,6 +23,7 @@ const usersReducer = (state = initialState, action) => {
             }
         case 'LOGIN_ERROR':
             localStorage.removeItem('userid');
+            localStorage.removeItem('pass');
             return {
                 ...state,
                 error: 'Invalid credentials'
@@ -32,6 +34,8 @@ const usersReducer = (state = initialState, action) => {
                 error: null
             };
         case 'CLEAR_DATA':
+            localStorage.removeItem('userid');
+            localStorage.removeItem('pass');
             return {
                 user: null,
                 userId: null,
