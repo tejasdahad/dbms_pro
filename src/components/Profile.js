@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import StudentCard from './StudentCard';
 import TeacherCard from './TeacherCard';
 import { connect } from 'react-redux';
+import AppBar from './Navbar';
 
 function Copyright() {
   return (
@@ -58,14 +59,31 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Profile = ({ users }) => {
+const Profile = ({ users, history }) => {
   const classes = useStyles();
+  
+  useEffect(() => {
+    console.log('In user effect');
+    console.log(users);
+    if(users.userType===null){
+      console.log('in case');
+      history.push('/');
+    }
+  },[users]);
+
+
+  useEffect(() => {
+    if(!users.user){
+      history.push('/');
+    }
+  },[]);
 
   return (
     <React.Fragment>
+      <AppBar />
       <CssBaseline />
       <main className={classes.layout}>
-      {users.userType==='S'?<StudentCard/>:<TeacherCard />}
+      {users.user && (users.userType==='S'?<StudentCard/>:<TeacherCard />)}
         
         <Copyright />
       </main>

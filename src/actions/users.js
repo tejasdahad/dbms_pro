@@ -16,12 +16,46 @@ export const addDomain = ({domain,subDomain,email,name,user,userId}) => async di
     });
 } 
 
-export const login = ({data, userId, flag}) => async dispatch => {
-    const ndata = {
-        data,userId,flag
+export const login = ({pass, userId}) => async dispatch => {
+    var de,data,flag;
+    de = await firestore.collection('2020-21').doc('STUDENTS').collection('STUDENTS').doc(userId).get();
+    data = de.data();
+    if(data){
+      flag='S';
+    }else{
+      de = await firestore.collection('2020-21').doc('TEACHERS').collection('TEACHERS').doc(userId).get();
+      data = de.data();
+      if(data){
+        flag='T';
+      }
     }
-    dispatch({
-        type:'LOGIN',
-        payload:ndata
-    })
+    if(data && data.pass===pass){
+        console.log(data);
+        const ndata = {
+            data,userId,flag
+        }
+        dispatch({
+            type:'LOGIN',
+            payload:ndata
+        });
+    }else{
+        console.log('Not found or invalid cred');
+        dispatch({
+            type:"LOGIN_ERROR"
+        })
+    }
+    
 };
+
+
+export const clearError = () => dispatch => {
+    dispatch({
+        type:'CLEAR_ERROR'
+    });
+}
+
+export const clearData = () => dispatch => {
+    dispatch({
+        type:'CLEAR_DATA'
+    });
+}
