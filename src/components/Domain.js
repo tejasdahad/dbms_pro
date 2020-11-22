@@ -59,7 +59,7 @@ function Copyright() {
   }));
   
   
-  const Domain = ({ users, login }) => {
+  const Domain = ({ users, login, history }) => {
     const classes = useStyles();
 
     useEffect(() => {
@@ -67,6 +67,13 @@ function Copyright() {
         login({pass: localStorage.getItem('pass'),userId: localStorage.getItem('userid')});
       }
     },[]);
+
+
+  useEffect(() => {
+    if(users.user && users.user.domain!==''){
+      history.push('/profile');
+    }
+  },[users.user]);
   
     return (
       <React.Fragment>
