@@ -97,7 +97,7 @@ const StudentDomain = ({addDomain,users,history }) => {
         <main className={classes.layout}>
         <Paper className={classes.paper}>
         <Typography component="h1" variant="h4" align="center" style={{marginBottom:10,color:"blue"}}>
-            Add Domain
+            Select Domain
           </Typography>
             <Grid container>
                 <Grid item xs={6}>

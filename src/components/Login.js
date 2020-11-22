@@ -83,7 +83,7 @@ const Login = ({history,login, users, clearError}) => {
   useEffect(() => {
     if(users.user){
       if(users.user.name===''){
-        history.push('/add_domain');
+        history.push('/domain');
       }else{
         history.push('/profile')
       }
