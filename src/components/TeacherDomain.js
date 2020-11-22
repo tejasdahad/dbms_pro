@@ -215,7 +215,7 @@ const TeacherDomain = ({addTeacherDomain,users,history }) => {
                         <option aria-label="None" value="" />
                         { domain === 'Machinelearning' && <option value={"Image rec"}>Image Recognition</option>}
                         { domain === 'Machinelearning' && <option value={"NLP"}>NLP</option>}
-                        { domain === 'Datascience' && <option value={"Analysis"}>Data Analysis</option>}
+                        { domain === 'Datascience' && <option value={"Data Analysis"}>Data Analysis</option>}
                         { domain === 'Cybersecurity' && <option value={"Pentester"}>Penetration testing</option>}
                         { domain === 'Blockchain' && <option value={"Cryptocurrency"}>CryptoCurrency</option>}
                         { domain === 'IOT' && <option value={'Softdev'}>Software Devloper</option>}

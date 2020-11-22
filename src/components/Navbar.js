@@ -59,7 +59,7 @@ const MenuBar = ({ history, clearData, users }) => {
         <Toolbar>
           
           <Typography variant="h5" align="left" className={classes.title}>
-            Seminar Guide
+            PICT TE SEMINAR ALLOCATION
           </Typography>
           {users.user && <Typography variant="p" align="right" className={classes.title}>
             {users.user.name}
