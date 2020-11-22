@@ -166,7 +166,6 @@ const StudentDomain = ({addDomain,users,history }) => {
                     } className={classes.button} variant="contained" color="primary" onClick={(e) => {
                         e.preventDefault();
                         addDomain({domain,subDomain,email,name, user:users.user,userId: users.userId});
-                        history.push("/profile");
                     }}>Submit</Button>
                 </Grid>
             </Grid>
