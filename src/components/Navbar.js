@@ -89,10 +89,6 @@ const MenuBar = ({ history, clearData, users }) => {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={e => {
-                    e.preventDefault();
-                    history.push('/profile');
-                }}>Profile</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>
