@@ -70,7 +70,7 @@ function Copyright() {
 
 
   useEffect(() => {
-    if(users.user && users.user.domain!==''){
+    if(users.user && users.user.name!==''){
       history.push('/profile');
     }
   },[users.user]);
