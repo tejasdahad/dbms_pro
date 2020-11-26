@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import { firestore } from '../firebase/firebase';
 import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -103,7 +104,8 @@ const TeacherDomain = ({addTeacherDomain,users,history }) => {
     const [subDomain,setSubdomain] = useState('');
     const [email,setEmail] = useState('');
     const [name,setName] = useState('');
-    
+    const [selected,setSelected] = useState({});
+    const [domainList,setDomainList] = useState([]);
 
     useEffect(() => {
         console.log(finalArray);
@@ -127,7 +129,23 @@ const TeacherDomain = ({addTeacherDomain,users,history }) => {
         ]);
         setDomain('');
         setSubdomain('');
+        setSelected({});
     }
+
+    useEffect(() => {
+        firestore.collection('2020-21').doc('DOMAINS').collection('domain_list').onSnapshot((snapshot) => {
+            const postData = [];
+            snapshot.forEach((doc) => postData.push({ ...doc.data(), id: doc.id }));
+            setDomainList(postData);
+            console.log(postData);
+          });
+    },[]);
+    useEffect(() => {
+        console.log(domain);
+        const ds = (domainList.filter(d => d.id === domain))[0];
+        console.log(ds);
+        setSelected(ds);
+    },[domain]);
 
     const handleDomain = (e) => {
         setDomain({...domain, [e.target.name]: e.target.checked });
@@ -191,11 +209,10 @@ const TeacherDomain = ({addTeacherDomain,users,history }) => {
                         label="Domain"
                     >
                         <option aria-label="None" value="" />
-                        {!domainArray.includes("Machinelearning")&&<option value={"Machinelearning"}>Machine Learning</option>}
-                        {!domainArray.includes("Datascience")&&<option value={"Datascience"}>Data Science</option>}
-                        {!domainArray.includes("Cybersecurity")&&<option value={"Cybersecurity"}>Cybersecurity</option>}
-                        {!domainArray.includes("Blockchain")&&<option value={"Blockchain"}>Blockchain</option>}
-                        {!domainArray.includes("IOT")&&<option value={"IOT"}>Internet of Things</option>}
+                        { domainList && domainList.map((d) => 
+                            
+                            !domainArray.includes(d.id)&&<option value={d.id}>{d.id}</option>
+                        ) }
                     </Select>
                     </FormControl>
                    
@@ -213,6 +230,9 @@ const TeacherDomain = ({addTeacherDomain,users,history }) => {
                         label="Sub Domain"
                     >
                         <option aria-label="None" value="" />
+                        { (domain&&selected) && selected.sub_domain_list.map(de => (
+                            <option value={de}>{de}</option>
+                        )) }
                         { domain === 'Machinelearning' && <option value={"Image rec"}>Image Recognition</option>}
                         { domain === 'Machinelearning' && <option value={"NLP"}>NLP</option>}
                         { domain === 'Datascience' && <option value={"Data Analysis"}>Data Analysis</option>}
