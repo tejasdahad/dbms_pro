@@ -1,4 +1,4 @@
-import React,{ Fragment, useState } from 'react';
+import React,{ Fragment, useState, useEffect } from 'react';
 import { makeStyles,withStyles } from '@material-ui/core/styles';
 import { addDomain }  from '../actions/users';
 import { connect } from 'react-redux';
@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import { firestore } from '../firebase/firebase';
 
 const BootstrapInput = withStyles((theme) => ({
     root: {
@@ -91,6 +92,23 @@ const StudentDomain = ({addDomain,users,history }) => {
     const [subDomain,setSubdomain] = useState('');
     const [email,setEmail] = useState('');
     const [name,setName] = useState('');
+    const [domainList,setDomainList] = useState([]);
+    const [selected,setSelected] = useState();
+
+    useEffect(() => {
+        firestore.collection('2020-21').doc('DOMAINS').collection('domain_list').onSnapshot((snapshot) => {
+            const postData = [];
+            snapshot.forEach((doc) => postData.push({ ...doc.data(), id: doc.id }));
+            setDomainList(postData);
+            console.log(postData);
+          });
+    },[]);
+    useEffect(() => {
+        console.log(domain);
+        const ds = (domainList.filter(d => d.id === domain))[0];
+        console.log(ds);
+        setSelected(ds);
+    },[domain]);
     return (
         <Fragment>
         <CssBaseline />
@@ -122,15 +140,14 @@ const StudentDomain = ({addDomain,users,history }) => {
                         onChange={e => {
                             e.preventDefault();
                             setDomain(e.target.value);
+                            setSelected(e.target.value.index)
                         }}
                         label="Domain"
                     >
-                        <option aria-label="None" value="" />
-                        <option value={"Machinelearning"}>Machine Learning</option>
-                        <option value={"Datascience"}>Data Science</option>
-                        <option value={"Cybersecurity"}>Cybersecurity</option>
-                        <option value={"Blockchain"}>Blockchain</option>
-                        <option value={"IOT"}>Internet of Things</option>
+                        <option aria-label="None" value="" name="" />
+                        { domainList && domainList.map((d) => (
+                            <option value={d.id}>{d.id}</option>
+                        )) }
                     </Select>
                     </FormControl>
                    
@@ -148,12 +165,9 @@ const StudentDomain = ({addDomain,users,history }) => {
                         label="Sub Domain"
                     >
                         <option aria-label="None" value="" />
-                        { domain === 'Machinelearning' && <option value={"Image rec"}>Image Recognition</option>}
-                        { domain === 'Machinelearning' && <option value={"NLP"}>NLP</option>}
-                        { domain === 'Datascience' && <option value={"Analysis"}>Data Analysis</option>}
-                        { domain === 'Cybersecurity' && <option value={"Pentester"}>Penetration testing</option>}
-                        { domain === 'Blockchain' && <option value={"Cryptocurrency"}>CryptoCurrency</option>}
-                        { domain === 'IOT' && <option value={'Softdev'}>Software Devloper</option>}
+                        { (domain&&selected) && selected.sub_domain_list.map(de => (
+                            <option value={de}>{de}</option>
+                        )) }
                     </Select>
                     </FormControl>}
                    
