@@ -8,6 +8,7 @@ import TeacherCard from './TeacherCard';
 import { connect } from 'react-redux';
 import AppBar from './Navbar';
 import { login } from '../actions/users';
+import { allocateStudent } from '../actions/algo';
 
 function Copyright() {
   return (
@@ -60,11 +61,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Profile = ({ users, history, login }) => {
+const Profile = ({ users, history, login, allocateStudent }) => {
   const classes = useStyles();
   useEffect(() => {
     if(localStorage.getItem('userid')){
       login({pass: localStorage.getItem('pass'),userId: localStorage.getItem('userid')});
+      allocateStudent();
     }
   },[]);
   useEffect(() => {
@@ -100,4 +102,4 @@ const mapStateToProps = state => ({
     users: state.users
 });
 
-export default connect(mapStateToProps,{ login })(Profile);
+export default connect(mapStateToProps,{ login, allocateStudent })(Profile);

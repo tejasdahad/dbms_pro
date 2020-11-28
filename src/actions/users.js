@@ -57,9 +57,8 @@ export const login = ({pass, userId}) => async dispatch => {
         console.log('Not found or invalid cred');
         dispatch({
             type:"LOGIN_ERROR"
-        })
+        });
     }
-    
 };
 
 
