@@ -1,4 +1,4 @@
-import React,{ useEffect } from 'react'
+import React,{ Fragment, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -12,6 +12,9 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { connect } from 'react-redux';
 import DomainListItem from './DomainListItem';
+import { firestore } from '../firebase/firebase';
+import AllocationTable from './AllocationTable';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -51,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     },
     root: {
         width: '100%',
-        maxWidth: 360,
+        maxWidth: 1000,
         backgroundColor: "black",
         color:"white",
         borderRadius:30
@@ -63,6 +66,9 @@ const useStyles = makeStyles((theme) => ({
   
 const TeacherCard = ({ users, history }) => {
     const classes = useStyles();
+    const [stuData, setStuData] = useState([]);
+    const [toggler,setToggler] = useState(false);
+
     useEffect(() => {
       console.log('In user effect');
       if(!users.user){
@@ -70,6 +76,23 @@ const TeacherCard = ({ users, history }) => {
         history.push('/');
       }
     },[users]);
+
+    useEffect(() => {
+      if(users.user){
+        firestore.collection('2020-21').doc('STUDENTS').collection('STUDENTS').where("teacherAssigned","==",users.userId).get()
+        .then(querySnapshot => {
+        const data = querySnapshot.docs.map(doc => (
+            {
+                id: doc.id,
+                ...doc.data()
+            }
+        ));
+        setStuData(data);
+        // console.log(data); // array of cities objects
+        });
+      }
+      
+    },[users.user]);
   
   
     useEffect(() => {
@@ -78,7 +101,8 @@ const TeacherCard = ({ users, history }) => {
       }
     },[]);
     return (
-        <Paper className={classes.paper}>
+      <Fragment>
+        {!toggler && <Paper className={classes.paper}>
           <Typography component="h1" variant="h4" align="center" style={{marginBottom:10,color:"blue"}}>
             Teacher Profile
           </Typography>
@@ -118,8 +142,32 @@ const TeacherCard = ({ users, history }) => {
             )}    
             </List>
             </Grid>
-        </Grid>
-        </Paper>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={4}></Grid>
+            <Grid item xs={4} style={{marginTop:20}}>
+            {(stuData && stuData.length>0) && <Button variant="contained" color="primary" onClick={e => {
+              e.preventDefault();
+              setToggler(true);
+            }}>View Allocated Students</Button>}
+            </Grid>
+            </Grid>
+        </Paper>}
+        {toggler && <Fragment>
+          <Grid container>
+              
+              <Grid item xs={12}  style={{marginTop:20, marginBottom:20}}>
+              <AllocationTable rows={stuData} />
+              </Grid>
+              <Grid item xs={1}></Grid>
+              <Grid item xs={5}></Grid>
+              <Grid item xs={2}>
+              <Button style={{marginLeft:"auto",marginRight:"auto"}} variant="contained" color="primary" onClick={e => {
+                  e.preventDefault();
+                  setToggler(false);
+              }}>Back to menu</Button></Grid>
+          </Grid>
+          </Fragment>}
+        </Fragment>
     )
 }
 const mapStateToProps = state => ({
