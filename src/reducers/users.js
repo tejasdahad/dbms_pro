@@ -2,7 +2,10 @@ const initialState = {
     user:null,
     userId: null,
     userType:null,
-    error: null
+    error: null,
+    allocateFlag: false,
+    teacherData: null,
+    studentData: null
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -11,6 +14,22 @@ const usersReducer = (state = initialState, action) => {
             return {
                 ...state,
                 user: action.payload
+            }
+        case 'SET_FLAG':
+            return {
+                ...state,
+                allocateFlag: true
+            }
+        case 'SET_ALLOCATED_DATA':
+            return {
+                ...state,
+                teacherData: action.payload.finalTeacherData,
+                studentData: action.payload.finalStudentData
+            };
+        case 'RESET_FLAG':
+            return {
+                ...state,
+                allocateFlag: false
             }
         case 'LOGIN':
             localStorage.setItem('userid',action.payload.userId);

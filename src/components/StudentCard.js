@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
+import { firestore } from '../firebase/firebase';
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -44,6 +45,18 @@ const useStyles = makeStyles((theme) => ({
   
 const StudentCard = ({ users }) => {
     const classes = useStyles();
+    const [teacherName, setTeacherName] = useState('');
+    const [teacherEmail,setTeacherEmail]= useState('');
+
+    useEffect(() => {
+      if(users.user.assigned){
+        firestore.collection('2020-21').doc('TEACHERS').collection('TEACHERS').doc(users.user.teacherAssigned).get().then(d => {
+          const data = d.data();
+          setTeacherEmail(data.email);
+          setTeacherName(data.name);
+        })
+      }
+    },[]);
     
     return (
         <Paper className={classes.paper}>
@@ -79,11 +92,22 @@ const StudentCard = ({ users }) => {
             Domain : <span style={{color:"grey"}}>{users.user.domain}</span>
             </Typography>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} style={{marginBottom:10}}>
             <Typography component="h6" variant="h6" align="right">
             Sub Domain : <span style={{color:"grey"}}>{users.user.subDomain}</span>
             </Typography>
             </Grid>
+            {users.user.assigned && <Fragment><Grid item xs={12} style={{marginBottom:10}}>
+            <Typography component="h6" variant="h6" align="left">
+            Teacher Assigned : <span style={{color:"grey"}}>{teacherName}</span>
+            </Typography>
+            </Grid>
+            <Grid item xs={12}>
+            <Typography component="h6" variant="h6" align="left">
+            Teacher Email : <span style={{color:"grey"}}>{teacherEmail}</span>
+            </Typography>
+            </Grid>
+            </Fragment>}
         </Grid>
         </Paper>
     )

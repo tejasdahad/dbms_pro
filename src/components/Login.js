@@ -82,6 +82,10 @@ const Login = ({history,login, users, clearError}) => {
 
   useEffect(() => {
     if(users.user){
+      if(users.userType==='A'){
+        history.push('/admin');
+        return;
+      }
       if(users.user.name===''){
         history.push('/domain');
       }else{

@@ -4,6 +4,7 @@ import Login from '../components/Login';
 import Domain from '../components/Domain';
 import Profile from '../components/Profile';
 import MenuBar from '../components/Navbar';
+import Admin from '../components/Admin';
 
 const AppRouter = () => (
     <BrowserRouter>
@@ -12,6 +13,7 @@ const AppRouter = () => (
             <Route path="/domain" component={Domain}/>
             <Route path='/profile' component={Profile} />
             <Route path='/appbar' component={MenuBar} />
+            <Route path='/admin' component={Admin} />
         </Switch>
     </BrowserRouter>
 );
