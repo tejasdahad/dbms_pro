@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(6),
         padding: theme.spacing(3),
       },
-      borderRadius:20
+      borderRadius:20,
     },
     stepper: {
       padding: theme.spacing(3, 0, 5),
@@ -134,32 +134,30 @@ const Admin = ({ users, allocateStudent, history }) => {
                     Admin
                 </Typography>
                 <Grid container>
-                <Grid item xs={1}></Grid>
-                <Grid item xs={2} style={{marginBottom:10}}>
-                    <Button variant="contained" color="primary" size="medium" onClick={handleAllocate}>Allocate</Button>
+                <Grid item xs={3}></Grid>
+                <Grid item xs={4} style={{marginBottom:10}}>
+                    <Button  variant="contained" color="primary" size="medium" onClick={handleAllocate}>Allocate</Button>
                 </Grid>
                 <Grid item xs={1}></Grid>
-                <Grid item xs={3} style={{marginBottom:10}}>
+                <Grid item xs={4} style={{marginBottom:10}}>
                 <Button variant="contained" color="primary" size="medium" onClick={e => {
                     e.preventDefault();
                     setToggler(true);
                 }}>View Submissions</Button>
                 <Grid item xs={1}></Grid>
-                <Grid item xs={3}><Button variant="contained" color="primary" size="medium">Reset</Button>
-                </Grid>
             </Grid>
                 </Grid>
                 </Paper>}
                 {toggler && <Fragment>
                     <Grid container>
-                        <Grid item xs={1} style={{marginTop:20}}></Grid>
-                        <Grid item xs={10}  style={{marginTop:20, marginBottom:20}}>
+                        
+                        <Grid item xs={12}  style={{marginTop:20, marginBottom:20}}>
                         <AllocationTable rows={tableData} />
                         </Grid>
-                        <Grid item xs={1}></Grid>
-                        <Grid item xs={5}></Grid>
-                        <Grid item xs={2}>
-                        <Button style={{marginLeft:"auto",marginRight:"auto"}} variant="contained" color="primary" onClick={e => {
+                        
+                        <Grid item xs={3}></Grid>
+                        <Grid item xs={4}>
+                        <Button style={{marginLeft:"auto",marginRight:"auto"}} variant="contained" color="primary" color="large" onClick={e => {
                             e.preventDefault();
                             setToggler(false);
                         }}>Back to menu</Button></Grid>

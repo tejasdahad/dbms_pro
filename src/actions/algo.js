@@ -6,10 +6,12 @@ export const allocateStudent = () => async dispatch => {
     const teacherData = [];
     const studentData = [];
     var count =0;
-        firestore.collection('2020-21').doc('STUDENTS').collection('STUDENTS').onSnapshot((snapshot) => {
-            snapshot.forEach((doc) => studentData.push({ ...doc.data(), id: doc.id }));
-            console.log(studentData)
-        });
+
+    firestore.collection('2020-21').doc('STUDENTS').collection('STUDENTS').onSnapshot((snapshot) => {
+        snapshot.forEach((doc) => studentData.push({ ...doc.data(), id: doc.id }));
+        console.log(studentData)
+    });
+    
     firestore.collection('2020-21').doc('TEACHERS').collection('TEACHERS').onSnapshot((snapshot) => {
         snapshot.forEach((doc) => teacherData.push({ ...doc.data(), id: doc.id }));
         console.log(teacherData);
