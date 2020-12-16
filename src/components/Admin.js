@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import {connect } from 'react-redux';
-import { allocateStudent } from '../actions/algo';
+import { allocateStudent, test,clearData } from '../actions/algo';
 import { login } from '../actions/users';
 import { firestore } from '../firebase/firebase';
 import AllocationTable from './AllocationTable';
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 }));
   
 
-const Admin = ({ users, allocateStudent, history }) => {
+const Admin = ({ users, allocateStudent, history,test,clearData }) => {
     const [toggler,setToggler] = useState(false);
     const [tableData, setTableData] = useState([]);
     useEffect(() => {
@@ -123,6 +123,7 @@ const Admin = ({ users, allocateStudent, history }) => {
   const handleAllocate = (e) => {
       e.preventDefault();
       allocateStudent();
+     //test();
   }
 
     return (
@@ -144,7 +145,10 @@ const Admin = ({ users, allocateStudent, history }) => {
                     e.preventDefault();
                     setToggler(true);
                 }}>View Submissions</Button>
-                <Grid item xs={1}></Grid>
+                <Grid item xs={1}><Button variant="contained" color="primary" size="medium" onClick={e => {
+                  e.preventDefault();
+                  clearData();
+              }}>Clear Data</Button></Grid>
             </Grid>
                 </Grid>
                 </Paper>}
@@ -172,4 +176,4 @@ const mapStateToProps = state => ({
     users: state.users
 })
 
-export default connect(mapStateToProps,{ allocateStudent })(Admin);
+export default connect(mapStateToProps,{ allocateStudent, test, clearData })(Admin);
