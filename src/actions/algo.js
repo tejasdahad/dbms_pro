@@ -1,5 +1,79 @@
 import { firestore } from '../firebase/firebase';
 
+export const clearData = () => async dispatch => {
+    const studentData = [];
+    var count =0;
+
+    firestore.collection('2020-21').doc('STUDENTS').collection('STUDENTS').onSnapshot((snapshot) => {
+        snapshot.forEach((doc) => studentData.push({ ...doc.data(), id: doc.id }));
+        console.log(studentData);
+
+        var batch = firestore.batch();
+        var batch1 = firestore.batch();
+        var i=0;
+        for(i=0;i<studentData.length;i++){
+            var nycRef = firestore.collection("2020-21").doc("STUDENTS").collection("STUDENTS").doc(studentData[i].id);
+            batch.update(nycRef, {assigned: false,teacherAssigned:""});
+        }
+// Set the value of 'NYC'
+        
+
+        // // Update the population of 'SF'
+        // var sfRef = firestore.collection("2020-21").doc("TEACHERS").collection("TEACHERS").doc("teacher2");
+        // batch.update(sfRef, {"noOfAssign": 1});
+
+        // Commit the batch
+        batch.commit().then(function () {
+            console.log("Batch executed");
+            var nycRef1 = firestore.collection("2020-21").doc("TEACHERS").collection("TEACHERS").doc("teacher1");
+            batch1.update(nycRef1, {assigned:[],noOfAssign:0});
+            var nycRef2 = firestore.collection("2020-21").doc("TEACHERS").collection("TEACHERS").doc("teacher2");
+            batch1.update(nycRef2, {assigned:[],noOfAssign:0});
+            batch1.commit().then(() => {
+                console.log("Batch2 commited");
+            })
+        });
+    });
+}
+
+export const test = () => async dispatch => {
+    const studentData = [];
+    var count =0;
+
+    firestore.collection('2020-21').doc('STUDENTS').collection('STUDENTS').onSnapshot((snapshot) => {
+        snapshot.forEach((doc) => studentData.push({ ...doc.data(), id: doc.id }));
+        console.log(studentData);
+
+        var batch = firestore.batch();
+        var batch1 = firestore.batch();
+        var i=0;
+        for(i=0;i<studentData.length;i++){
+            var nycRef = firestore.collection("2020-21").doc("STUDENTS").collection("STUDENTS").doc(studentData[i].id);
+            batch.update(nycRef, {"pass":"123456"});
+        }
+// Set the value of 'NYC'
+        
+
+        // // Update the population of 'SF'
+        // var sfRef = firestore.collection("2020-21").doc("TEACHERS").collection("TEACHERS").doc("teacher2");
+        // batch.update(sfRef, {"noOfAssign": 1});
+
+        // Commit the batch
+        batch.commit().then(function () {
+            console.log("Batch executed");
+            var nycRef1 = firestore.collection("2020-21").doc("TEACHERS").collection("TEACHERS").doc("teacher1");
+            batch1.update(nycRef1, {"pass":"123456"});
+            var nycRef2 = firestore.collection("2020-21").doc("TEACHERS").collection("TEACHERS").doc("teacher2");
+            batch1.update(nycRef2, {"pass":"123456"});
+            batch1.commit().then(() => {
+                console.log("Batch2 commited");
+            })
+        });
+    });
+
+
+}
+
 export const allocateStudent = () => async dispatch => {
     var finalStudentData = [];
     var finalTeacherData = [];
@@ -56,7 +130,7 @@ export const allocateStudent = () => async dispatch => {
                 //     count++;
                 //     console.log(count);
                 // });
-                //console.log(filterTea[0]);
+                // console.log(filterTea[0]);
                 // firestore.collection('2020-21').doc('TEACHERS').collection('TEACHERS').doc(filterTea[0].id).set(filterTea[0]).then(d => (
                 //     console.log("Updated teacher")
                 // ));
@@ -76,6 +150,14 @@ export const allocateStudent = () => async dispatch => {
                 console.log(filterTea);
             if(filterTea.length>0){
                 console.log(s.id);
+                // teacherData.map(t => {
+                //     if(t.id === filterTea[0].id){
+                //         t.assigned.push(s.id);
+                //         t.noOfAssign+=1;
+                //         s.assigned = true;
+                //         s.teacherAssigned = t.id;
+                //     }
+                // })
                 filterTea[0].assigned.push(s.id);
                 filterTea[0].noOfAssign+=1;
                 s.assigned = true;
