@@ -20,6 +20,12 @@ const usersReducer = (state = initialState, action) => {
                 ...state,
                 allocateFlag: true
             }
+        case 'CLEAR_STATE':
+            return {
+                ...state,
+                studentData:null,
+                teacherData: null
+            }
         case 'SET_ALLOCATED_DATA':
             return {
                 ...state,

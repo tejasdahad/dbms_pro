@@ -1,5 +1,31 @@
 import { firestore } from '../firebase/firebase';
 
+export const clearState = () => async dispatch => {
+    dispatch({
+        type: 'CLEAR_STATE'
+    });
+}
+
+export const finalUpdate = ({teacherData,studentData}) => async dispatch => {
+    var i=0;
+    console.log(teacherData);
+    console.log(studentData);
+    var batch = firestore.batch();
+    var batch1 = firestore.batch();
+    for(i=0;i<studentData.length;i++){
+     var nycRef = firestore.collection("2020-21").doc("STUDENTS").collection("STUDENTS").doc(studentData[i].id);
+     batch.set(nycRef, studentData[i]);
+    }
+    for(i=0;i<teacherData.length;i++){
+        var nycRef1 = firestore.collection("2020-21").doc("TEACHERS").collection("TEACHERS").doc(teacherData[i].id);
+        batch.update(nycRef1, {assigned: teacherData[i].assigned, noOfAssign: teacherData[i].noOfAssign});
+    }
+    batch.commit().then(function () {
+        console.log("Batch executed");
+        
+    });
+}
+
 export const clearData = () => async dispatch => {
     const studentData = [];
     var count =0;
@@ -34,44 +60,83 @@ export const clearData = () => async dispatch => {
             })
         });
     });
+    dispatch({
+        type:'CLEAR_STATE'
+    });
 }
 
-export const test = () => async dispatch => {
+export const test = ({finalUpdate}) => async dispatch => {
+    const teacherData = [];
     const studentData = [];
     var count =0;
 
     firestore.collection('2020-21').doc('STUDENTS').collection('STUDENTS').onSnapshot((snapshot) => {
         snapshot.forEach((doc) => studentData.push({ ...doc.data(), id: doc.id }));
-        console.log(studentData);
-
-        var batch = firestore.batch();
-        var batch1 = firestore.batch();
-        var i=0;
-        for(i=0;i<studentData.length;i++){
-            var nycRef = firestore.collection("2020-21").doc("STUDENTS").collection("STUDENTS").doc(studentData[i].id);
-            batch.update(nycRef, {"pass":"123456"});
-        }
-// Set the value of 'NYC'
-        
-
-        // // Update the population of 'SF'
-        // var sfRef = firestore.collection("2020-21").doc("TEACHERS").collection("TEACHERS").doc("teacher2");
-        // batch.update(sfRef, {"noOfAssign": 1});
-
-        // Commit the batch
-        batch.commit().then(function () {
-            console.log("Batch executed");
-            var nycRef1 = firestore.collection("2020-21").doc("TEACHERS").collection("TEACHERS").doc("teacher1");
-            batch1.update(nycRef1, {"pass":"123456"});
-            var nycRef2 = firestore.collection("2020-21").doc("TEACHERS").collection("TEACHERS").doc("teacher2");
-            batch1.update(nycRef2, {"pass":"123456"});
-            batch1.commit().then(() => {
-                console.log("Batch2 commited");
-            })
-        });
     });
-
-
+    firestore.collection('2020-21').doc('TEACHERS').collection('TEACHERS').onSnapshot((snapshot) => {
+        snapshot.forEach((doc) => teacherData.push({ ...doc.data(), id: doc.id }));
+        var remaining=[];
+       studentData.map(s => {
+            const filterTea = [];
+            teacherData.map(as => {
+                if(as.domain[0].name===s.domain && as.domain[0].sub === s.subDomain){
+                    if(as.noOfAssign<6){
+                        filterTea.push(as);
+                    }
+                    
+                }
+            });
+            if(filterTea.length===0 && s.assigned===false){
+                remaining.push(s);
+                console.log(remaining)
+            }
+            if(filterTea.length>0){
+                teacherData.map(as => {
+                    if(as.id===filterTea[0].id){
+                        as.assigned.push(s.id);
+                        as.noOfAssign+=1;
+                        s.assigned = true;
+                        s.teacherAssigned = as.id;
+                    }
+                })
+            }
+       })
+       if(remaining.length>0){
+           remaining.map(s => {
+                const filterTea = [];
+                teacherData.map(as => {
+                    var i=1;
+                    for(i=1;i<as.domain.length;i++){
+                        if(as.domain[i].name===s.domain && as.domain[i].sub === s.subDomain){
+                            if(as.noOfAssign<6){
+                                filterTea.push(as);
+                                break;
+                            }
+                            
+                        }
+                    }
+                });
+                if(filterTea.length>0){
+                    teacherData.map(as => {
+                        if(as.id===filterTea[0].id){
+                            as.assigned.push(s.id);
+                            as.noOfAssign+=1;
+                            s.assigned = true;
+                            s.teacherAssigned = as.id;
+                        }
+                    })
+                }
+           });
+       }
+       //finalUpdate({teacherData,studentData});
+    dispatch({
+        type:'SET_ALLOCATED_DATA',
+        payload: {
+            finalStudentData: studentData,
+            finalTeacherData: teacherData
+        }
+    });
+    });
 }
 
 export const allocateStudent = () => async dispatch => {
