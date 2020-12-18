@@ -1,6 +1,6 @@
 import React,{ Fragment, useEffect, useState } from 'react';
 import Navbar from './Navbar';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import {makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 }));
   
 
-const Admin = ({ users, allocateStudent, history,test,clearData, finalUpdate }) => {
+const Admin = ({ users, history, test, clearData, finalUpdate }) => {
     const [toggler,setToggler] = useState(false);
     const [tableData, setTableData] = useState([]);
     useEffect(() => {
@@ -76,41 +76,9 @@ const Admin = ({ users, allocateStudent, history,test,clearData, finalUpdate }) 
 
     useEffect(() => {
       if(users.teacherData && users.studentData){
-        history.push('/dummy');
-        
+        history.push('/allocated');
       }
     },[users.studentData]);
-    // useEffect(() => {
-    //     if(users.teacherData&& users.studentData){
-    //       var i;
-    //       for(i=0;i<users.studentData.length;i++){
-    //           firestore.collection('2020-21').doc('STUDENTS').collection('STUDENTS').doc(users.studentData[i].id).set(users.studentData[i]).then(d => {
-    //             console.log("Updated students");
-    //           })
-    //       }
-    //     }
-    //   },[users.studentData]);
-      
-  // useEffect(() => {
-  //   if(users.teacherData&& users.studentData){
-  //     var i;
-  //     const newTeacher = [];
-  //     users.teacherData.map(a => {
-  //       if(newTeacher.includes(a)){
-  //         console.log("Present");
-
-  //       }else{
-  //         newTeacher.push(a);
-  //       }
-  //       console.log(newTeacher)
-  //     })
-  //     for(i=0;i<newTeacher.length;i++){
-  //         firestore.collection('2020-21').doc('TEACHERS').collection('TEACHERS').doc(newTeacher[i].id).set(newTeacher[i]).then(d => {
-  //           console.log("Updated teachers");
-  //         })
-  //     }
-  //   }
-  // },[users.teacherData]);
 
   useEffect(() => {
     if(localStorage.getItem('userid')){
@@ -129,7 +97,6 @@ const Admin = ({ users, allocateStudent, history,test,clearData, finalUpdate }) 
 
   const handleAllocate = (e) => {
       e.preventDefault();
-     // allocateStudent();
      test({finalUpdate});
   }
 
@@ -138,42 +105,39 @@ const Admin = ({ users, allocateStudent, history,test,clearData, finalUpdate }) 
             <Navbar />
             <Fragment>
                 {!toggler&&<Paper className={classes.paper}>
-                <Typography component="h1" variant="h4" align="center" style={{marginBottom:10,color:"blue"}}>
-                    Admin
-                </Typography>
-                <Grid container>
-                <Grid item xs={3}></Grid>
-                <Grid item xs={4} style={{marginBottom:10}}>
-                    <Button  variant="contained" color="primary" size="medium" onClick={handleAllocate}>Allocate</Button>
-                </Grid>
-                <Grid item xs={1}></Grid>
-                <Grid item xs={4} style={{marginBottom:10}}>
-                <Button variant="contained" color="primary" size="medium" onClick={e => {
-                    e.preventDefault();
-                    setToggler(true);
-                }}>View Submissions</Button>
-                <Grid item xs={1}><Button variant="contained" color="primary" size="medium" onClick={e => {
-                  e.preventDefault();
-                  clearData();
-              }}>Clear Data</Button></Grid>
-            </Grid>
-                </Grid>
+                  <Typography component="h1" variant="h4" align="center" style={{marginBottom:10,color:"blue"}}>
+                      Admin
+                  </Typography>
+                  <Grid container>
+                    <Grid item xs={3}></Grid>
+                    <Grid item xs={4} style={{marginBottom:10}}>
+                      <Button  variant="contained" color="primary" size="medium" onClick={handleAllocate}>Allocate</Button>
+                    </Grid>
+                    <Grid item xs={1}></Grid>
+                    <Grid item xs={4} style={{marginBottom:10}}>
+                    <Button variant="contained" color="primary" size="medium" onClick={e => {
+                      e.preventDefault();
+                      setToggler(true);
+                    }}>View Submissions</Button>
+                    <Grid item xs={1}>
+                      <Button variant="contained" color="primary" size="medium" onClick={e => {
+                      e.preventDefault();
+                      clearData();
+                      }}>Clear Data</Button></Grid>
+                    </Grid>
+                  </Grid>
                 </Paper>}
                 {toggler && <Fragment>
-                    <Grid container>
-                        
-                        <Grid item xs={12}  style={{marginTop:20, marginBottom:20}}>
+                  <Grid container> 
+                      <Grid item xs={12}  style={{marginTop:20, marginBottom:20}}>
                         <AllocationTable rows={tableData} />
-                        </Grid>
-                        
-                        <Grid item xs={3}></Grid>
-                        <Grid item xs={4}>
-                        <Button style={{marginLeft:"auto",marginRight:"auto"}} variant="contained" color="primary" color="large" onClick={e => {
-                            e.preventDefault();
-                            setToggler(false);
-                        }}>Back to menu</Button></Grid>
-                    </Grid>
-                    </Fragment>}
+                      </Grid>
+                      <Button variant="contained" color="primary" size="large" style={{display: "block", marginLeft:"auto", marginRight: "auto", widht:"auto"}} onClick={e => {
+                        e.preventDefault();
+                        setToggler(false);
+                      }}>Back to menu</Button>
+                  </Grid>
+                </Fragment>}
             </Fragment>
         </div>
     )

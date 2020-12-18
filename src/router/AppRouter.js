@@ -15,7 +15,7 @@ const AppRouter = () => (
             <Route path='/profile' component={Profile} />
             <Route path='/appbar' component={MenuBar} />
             <Route path='/admin' component={Admin} />
-            <Route path='/dummy' component={Dummy} />
+            <Route path='/allocated' component={Dummy} />
         </Switch>
     </BrowserRouter>
 );

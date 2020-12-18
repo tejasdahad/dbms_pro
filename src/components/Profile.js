@@ -8,7 +8,6 @@ import TeacherCard from './TeacherCard';
 import { connect } from 'react-redux';
 import AppBar from './Navbar';
 import { login } from '../actions/users';
-import { firestore } from '../firebase/firebase';
 
 function Copyright() {
   return (
@@ -78,12 +77,6 @@ const Profile = ({ users, history, login, }) => {
     }
   },[users]);
 
-  // useEffect(() => {
-  //   if(users.allocateFlag===true){
-  //     updateTeacher();
-      
-  //   }
-  // },[users.allocateFlag]);
   useEffect(() => {
     if(!users.user){
       history.push('/');

@@ -14,40 +14,6 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { firestore } from '../firebase/firebase';
 
-const BootstrapInput = withStyles((theme) => ({
-    root: {
-        'label + &':{
-            marginTop: theme.spacing(3),
-        },
-    },
-    input:{
-        borderRadius:4,
-        position:'relative',
-        backgroundColor: theme.palette.background.paper,
-        border: '1px  solid #ced4da',
-        fontSize: 16,
-        padding: '10px 26px 10px 12px',
-        transition: theme.transitions.create(['border-color','box-shadow']),
-        fontFamily: [
-            '-apple-system',
-            'BlinkMacSystemFont',
-            '"Segoe UI"',
-            'Roboto',
-            '"Helvetica Neue"',
-            'Arial',
-            'sans-serif',
-            '"Apple Color Emoji"',
-            '"Segoe UI Emoji"',
-            '"Segoe UI Symbol"',
-        ].join(','),
-        '&:focus':{
-            borderRadius: 4,
-            borderColor: '#80bdff',
-            boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-        },
-     },
-}))(InputBase);
-
 const useStyles = makeStyles((theme) => ({
     margin:{
         margin: theme.spacing(1),
@@ -111,85 +77,78 @@ const StudentDomain = ({addDomain,users,history }) => {
     },[domain]);
     return (
         <Fragment>
-        <CssBaseline />
-        <main className={classes.layout}>
-        <Paper className={classes.paper}>
-        <Typography component="h1" variant="h4" align="center" style={{marginBottom:10,color:"blue"}}>
-            Select Domain
-          </Typography>
-            <Grid container>
-                <Grid item xs={6}>
-                    <TextField id="outlined-basic" label="Name" variant="outlined" value={name} onChange={e => {
-                        e.preventDefault();
-                        setName(e.target.value);
-                    }} />
-                </Grid>
-                <Grid item xs={6} style={{marginBottom:20}}>
-                    <TextField id="outlined-basic" label="Email" variant="outlined" value={email} onChange={e => {
-                        e.preventDefault();
-                        setEmail(e.target.value);
-                    }} />
-                </Grid>
-                
-                <Grid item xs={6}>
-                    <FormControl variant="outlined" className={classes.formControl}>
-                    <InputLabel htmlFor="outlined-age-native-simple">Domain</InputLabel>
-                    <Select
-                        native
-                        value={domain}
-                        onChange={e => {
-                            e.preventDefault();
-                            setDomain(e.target.value);
-                            setSelected(e.target.value.index)
-                        }}
-                        label="Domain"
-                    >
-                        <option aria-label="None" value="" name="" />
-                        { domainList && domainList.map((d) => (
-                            <option value={d.id}>{d.id}</option>
-                        )) }
-                    </Select>
-                    </FormControl>
-                   
-                </Grid>
-                <Grid item xs={6}>
-                    {domain!=='' && <FormControl variant="outlined" className={classes.formControl}>
-                    <InputLabel htmlFor="outlined-age-native-simple">Sub Domain</InputLabel>
-                    <Select
-                        native
-                        value={subDomain}
-                        onChange={e => {
-                            e.preventDefault();
-                            setSubdomain(e.target.value);
-                        }}
-                        label="Sub Domain"
-                    >
-                        <option aria-label="None" value="" />
-                        { (domain&&selected) && selected.sub_domain_list.map(de => (
-                            <option value={de}>{de}</option>
-                        )) }
-                    </Select>
-                    </FormControl>}
-                   
-                </Grid>
-               
-                <Grid item xs={4}></Grid>
-                <Grid item xs={4}>
-                    <Button disabled={
-                        (domain!==''&&subDomain!==''&&email!==''&&name!=='')?false:true
-                    } className={classes.button} variant="contained" color="primary" onClick={(e) => {
-                        e.preventDefault();
-                        addDomain({domain,subDomain,email,name, user:users.user,userId: users.userId});
-                    }}>Submit</Button>
-                </Grid>
-            </Grid>
-                         
-              
-            
-            </Paper>
-            
-        </main>
-        
+            <CssBaseline />
+            <main className={classes.layout}>
+                <Paper className={classes.paper}>
+                    <Typography component="h1" variant="h4" align="center" style={{marginBottom:10,color:"blue"}}>
+                        Select Domain
+                    </Typography>
+                    <Grid container>
+                        <Grid item xs={6}>
+                            <TextField id="outlined-basic" label="Name" variant="outlined" value={name} onChange={e => {
+                                e.preventDefault();
+                                setName(e.target.value);
+                            }} />
+                        </Grid>
+                        <Grid item xs={6} style={{marginBottom:20}}>
+                            <TextField id="outlined-basic" label="Email" variant="outlined" value={email} onChange={e => {
+                                e.preventDefault();
+                                setEmail(e.target.value);
+                            }} />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <FormControl variant="outlined" className={classes.formControl}>
+                            <InputLabel htmlFor="outlined-age-native-simple">Domain</InputLabel>
+                            <Select
+                                native
+                                value={domain}
+                                onChange={e => {
+                                    e.preventDefault();
+                                    setDomain(e.target.value);
+                                    setSelected(e.target.value.index)
+                                }}
+                                label="Domain"
+                            >
+                                <option aria-label="None" value="" name="" />
+                                { domainList && domainList.map((d) => (
+                                    <option value={d.id}>{d.id}</option>
+                                )) }
+                            </Select>
+                            </FormControl>
+                        
+                        </Grid>
+                        <Grid item xs={6}>
+                            {domain!=='' && <FormControl variant="outlined" className={classes.formControl}>
+                            <InputLabel htmlFor="outlined-age-native-simple">Sub Domain</InputLabel>
+                            <Select
+                                native
+                                value={subDomain}
+                                onChange={e => {
+                                    e.preventDefault();
+                                    setSubdomain(e.target.value);
+                                }}
+                                label="Sub Domain"
+                            >
+                                <option aria-label="None" value="" />
+                                { (domain&&selected) && selected.sub_domain_list.map(de => (
+                                    <option value={de}>{de}</option>
+                                )) }
+                            </Select>
+                            </FormControl>}
+                        
+                        </Grid>
+                        <Grid item xs={4}></Grid>
+                        <Grid item xs={4}>
+                            <Button disabled={
+                                (domain!==''&&subDomain!==''&&email!==''&&name!=='')?false:true
+                            } className={classes.button} variant="contained" color="primary" onClick={(e) => {
+                                e.preventDefault();
+                                addDomain({domain,subDomain,email,name, user:users.user,userId: users.userId});
+                            }}>Submit</Button>
+                        </Grid>
+                    </Grid>    
+                </Paper>
+            </main>
         </Fragment>
      );
 }
