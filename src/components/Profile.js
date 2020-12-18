@@ -86,12 +86,11 @@ const Profile = ({ users, history, login, }) => {
   return (
     <React.Fragment>
       <AppBar />
-      <CssBaseline />
-      <main className={classes.layout}>
-      {users.user && (users.userType==='S'?<StudentCard/>:<TeacherCard />)}
-        
-        <Copyright />
-      </main>
+        <CssBaseline />
+        <main className={classes.layout}>
+          {users.user && (users.userType==='S'?<StudentCard/>:<TeacherCard />)}
+          <Copyright />
+        </main>
     </React.Fragment>
   );
 }

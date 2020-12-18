@@ -147,14 +147,10 @@ const TeacherCard = ({ users, history }) => {
               <Grid item xs={12}  style={{marginTop:20, marginBottom:20}}>
                 <AllocationTable rows={stuData} />
               </Grid>
-              <Grid item xs={1}></Grid>
-              <Grid item xs={5}></Grid>
-              <Grid item xs={2}>
-                <Button style={{marginLeft:"auto",marginRight:"auto"}} variant="contained" color="primary" onClick={e => {
-                  e.preventDefault();
-                  setToggler(false);
-                }}>Back to menu</Button>
-              </Grid>
+              <Button style={{display:"block", marginLeft: "auto", marginRight: "auto", widht: "auto", marginBottom: "15px"}} variant="contained" color="primary" onClick={e => {
+                e.preventDefault();
+                setToggler(false);
+              }}>Back to menu</Button>
           </Grid>
         </Fragment>}
       </Fragment>
