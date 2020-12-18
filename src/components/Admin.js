@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import {connect } from 'react-redux';
-import { allocateStudent, test,clearData } from '../actions/algo';
+import { allocateStudent, test,clearData, finalUpdate } from '../actions/algo';
 import { login } from '../actions/users';
 import { firestore } from '../firebase/firebase';
 import AllocationTable from './AllocationTable';
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 }));
   
 
-const Admin = ({ users, allocateStudent, history,test,clearData }) => {
+const Admin = ({ users, allocateStudent, history,test,clearData, finalUpdate }) => {
     const [toggler,setToggler] = useState(false);
     const [tableData, setTableData] = useState([]);
     useEffect(() => {
@@ -73,16 +73,23 @@ const Admin = ({ users, allocateStudent, history,test,clearData }) => {
       },[users]);
 
     const classes = useStyles();
+
     useEffect(() => {
-        if(users.teacherData&& users.studentData){
-          var i;
-          for(i=0;i<users.studentData.length;i++){
-              firestore.collection('2020-21').doc('STUDENTS').collection('STUDENTS').doc(users.studentData[i].id).set(users.studentData[i]).then(d => {
-                console.log("Updated students");
-              })
-          }
-        }
-      },[users.studentData]);
+      if(users.teacherData && users.studentData){
+        history.push('/dummy');
+        
+      }
+    },[users.studentData]);
+    // useEffect(() => {
+    //     if(users.teacherData&& users.studentData){
+    //       var i;
+    //       for(i=0;i<users.studentData.length;i++){
+    //           firestore.collection('2020-21').doc('STUDENTS').collection('STUDENTS').doc(users.studentData[i].id).set(users.studentData[i]).then(d => {
+    //             console.log("Updated students");
+    //           })
+    //       }
+    //     }
+    //   },[users.studentData]);
       
   // useEffect(() => {
   //   if(users.teacherData&& users.studentData){
@@ -122,8 +129,8 @@ const Admin = ({ users, allocateStudent, history,test,clearData }) => {
 
   const handleAllocate = (e) => {
       e.preventDefault();
-      allocateStudent();
-     //test();
+     // allocateStudent();
+     test({finalUpdate});
   }
 
     return (
@@ -176,4 +183,4 @@ const mapStateToProps = state => ({
     users: state.users
 })
 
-export default connect(mapStateToProps,{ allocateStudent, test, clearData })(Admin);
+export default connect(mapStateToProps,{ allocateStudent, test, clearData, finalUpdate })(Admin);
